@@ -25,3 +25,7 @@ Route.get('/', async () => {
 })
 
 Route.post('/login', 'AuthController.login')
+
+Route.resource('/sites', 'SitesController')
+  .apiOnly()
+  .middleware({ '*': ['auth'] })
