@@ -10,7 +10,7 @@ export default class SitesController {
   }
 
   public async store({ auth, request }: HttpContextContract) {
-    const site = await auth.user?.related('sites').create(request.all())
+    const site = await auth.user?.related('sites').firstOrCreate(request.all())
 
     return site
   }

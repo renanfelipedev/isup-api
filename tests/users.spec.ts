@@ -5,8 +5,8 @@ import User from 'App/Models/User'
 import { rollbackMigrations, runMigrations } from '../japaFile'
 
 test.group('User', (group) => {
-  group.before(runMigrations)
-  group.after(rollbackMigrations)
+  group.beforeEach(runMigrations)
+  group.afterEach(rollbackMigrations)
 
   test('deve assegurar que a senha seja criptografada durante a criação de usuário', async (assert) => {
     const user = await User.create({

@@ -1,10 +1,34 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+
+import User from 'App/Models/User'
+import { loginSchema, registerSchema } from 'App/Validators/AuthValidator'
 export default class AuthController {
-  public async login({ request, auth }: HttpContextContract) {
-    const { email, password } = request.all()
+  public async login({ request, response, auth }: HttpContextContract) {
+    try {
+      await request.validate({
+        schema: loginSchema,
+      })
 
-    const token = await auth.use('api').attempt(email, password)
+      const { email, password } = request.all()
 
-    return token.toJSON()
+      const token = await auth.use('api').attempt(email, password)
+
+      return token.toJSON()
+    } catch ({ messages }) {
+      return response.status(400).send(messages)
+    }
+  }
+
+  public async register({ request, response }: HttpContextContract) {
+    try {
+      await request.validate({
+        schema: registerSchema,
+      })
+      const user = await User.create(request.all())
+
+      return user
+    } catch ({ messages }) {
+      return response.status(400).send(messages)
+    }
   }
 }
