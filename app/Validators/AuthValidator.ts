@@ -5,7 +5,6 @@ const registerSchema = schema.create({
     rules.email(),
     rules.required(),
     rules.unique({ table: 'users', column: 'email' }),
-    rules.exists({ table: 'users', column: 'email' }),
   ]),
 
   name: schema.string({}, [rules.required()]),

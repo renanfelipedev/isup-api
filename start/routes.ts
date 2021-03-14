@@ -30,3 +30,7 @@ Route.post('/register', 'AuthController.register')
 Route.resource('/sites', 'SitesController')
   .apiOnly()
   .middleware({ '*': ['auth'] })
+
+Route.resource('/sites/:siteId/info', 'SiteInfosController')
+  .apiOnly()
+  .middleware({ '*': ['auth'] })

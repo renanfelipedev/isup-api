@@ -14,7 +14,14 @@
     "Contracts": "contracts",
     "Services": "services"
   },
-  "preloads": ["./start/routes", "./start/kernel"],
+  "preloads": [
+    "./start/routes",
+    "./start/kernel",
+    {
+      "file": "./start/boot",
+      "environment": ["web"]
+    }
+  ],
   "providers": ["./providers/AppProvider", "@adonisjs/core", "@adonisjs/auth", "@adonisjs/lucid"],
   "aceProviders": ["@adonisjs/repl"]
 }
