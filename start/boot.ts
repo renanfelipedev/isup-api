@@ -19,7 +19,7 @@ setInterval(async () => {
   const sites = await Site.all()
 
   sites.forEach((site) => {
-    const info = {}
+    const status = {}
 
     site &&
       https
@@ -27,16 +27,16 @@ setInterval(async () => {
         .on('response', async (response) => {
           const port = site?.address.startsWith('https') ? 443 : 80
 
-          Object.assign(info, { port })
+          Object.assign(status, { port })
 
           const { statusCode } = response
-          Object.assign(info, { online: true })
+          Object.assign(status, { online: true })
 
           if (statusCode !== 200) {
-            Object.assign(info, { online: false })
+            Object.assign(status, { online: false })
           }
 
-          await site?.related('siteInfo').create(info)
+          await site?.related('status').create(status)
         })
         .on('error', () => {})
   })
