@@ -11,10 +11,8 @@ export default class StatusController {
     const site = await Site.findOrFail(siteId)
 
     if (site.userId !== user?.id) {
-      return response.status(400).json({
-        error: {
-          message: 'Unauthorized',
-        },
+      return response.status(401).json({
+        message: 'Unauthorized.',
       })
     }
 

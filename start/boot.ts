@@ -1,43 +1,31 @@
-/*
-|--------------------------------------------------------------------------
-| Preloaded File
-|--------------------------------------------------------------------------
-|
-| Any code written inside this file will be executed during the application
-| boot.
-|
-*/
-
-import https from 'https'
+import axios from 'axios'
 
 import Site from 'App/Models/Site'
 
 const SECOND = 1000
-const timeout = 120 * SECOND
+const MINUTE = 60 * SECOND
+const interval = 1 * MINUTE
 
-setInterval(async () => {
+const VerifyOnline = async () => {
   const sites = await Site.all()
 
-  sites.forEach((site) => {
-    const status = {}
+  sites.forEach(async (site) => {
+    const statusInfo = {}
 
-    site &&
-      https
-        .get(`${site?.address}`)
-        .on('response', async (response) => {
-          const port = site?.address.startsWith('https') ? 443 : 80
+    try {
+      const response = await axios.get(site.address)
+      const { request } = response
 
-          Object.assign(status, { port })
+      Object.assign(statusInfo, {
+        online: response.status === 200 && true,
+        port: request.agent.defaultPort,
+      })
+    } catch ({ port, isAxiosError }) {
+      Object.assign(statusInfo, { online: !isAxiosError, port: port })
+    }
 
-          const { statusCode } = response
-          Object.assign(status, { online: true })
-
-          if (statusCode !== 200) {
-            Object.assign(status, { online: false })
-          }
-
-          await site?.related('status').create(status)
-        })
-        .on('error', () => {})
+    await site?.related('status').create(statusInfo)
   })
-}, timeout)
+}
+
+setInterval(VerifyOnline, interval)
