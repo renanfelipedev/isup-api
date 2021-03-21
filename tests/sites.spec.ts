@@ -16,7 +16,6 @@ test.group('Site', (group) => {
 
     const site = await user.related('sites').create({
       address: 'www.test.com',
-      time: 10,
     })
 
     assert.equal(site.address, 'www.test.com')
@@ -32,17 +31,15 @@ test.group('Site', (group) => {
 
       await user.related('sites').create({
         address: 'www.test.com',
-        time: 10,
       })
 
       await user.related('sites').create({
         address: 'www.test.com',
-        time: 10,
       })
     } catch ({ code }) {
       console.log(code)
       assert.isObject(code)
-      assert.exists(code, 'error')
+      assert.exists(code, 'errors')
     }
   })
 })
