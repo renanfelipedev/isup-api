@@ -3,15 +3,12 @@ import Site from 'App/Models/Site'
 
 export default class SitesController {
   public async index({ auth }: HttpContextContract) {
-    const user = auth.user
-    await user?.preload('sites')
-
-    return user?.sites
+    await auth.user?.preload('sites')
+    return auth.user?.sites
   }
 
   public async store({ auth, request }: HttpContextContract) {
     const site = await auth.user?.related('sites').firstOrCreate(request.all())
-
     return site
   }
 
