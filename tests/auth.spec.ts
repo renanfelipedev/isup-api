@@ -23,8 +23,8 @@ test.group('Auth', (group) => {
     const { body } = await supertest(BASE_URL).post('/login').send({ email, password }).expect(200)
 
     assert.isObject(body)
-    assert.equal(body.type, 'bearer')
     assert.exists(body, 'token')
+    assert.exists(body, 'user')
   })
 
   test('não deve permitir login para usuário não cadastrado', async (assert) => {

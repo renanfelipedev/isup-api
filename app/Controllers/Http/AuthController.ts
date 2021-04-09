@@ -12,10 +12,14 @@ export default class AuthController {
       const { email, password } = request.all()
 
       const token = await auth.use('api').attempt(email, password)
+      const user = await User.findByOrFail('email', email)
 
-      return token.toJSON()
-    } catch ({ messages }) {
-      return response.status(400).send(messages)
+      return {
+        token,
+        user,
+      }
+    } catch (error) {
+      return response.status(400).json({ error: error.message })
     }
   }
 
