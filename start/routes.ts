@@ -20,17 +20,12 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async () => {
-  return { hello: 'world' }
-})
+const auth = { '*': ['auth'] }
+
+Route.get('/', () => ({ server: 'running' }))
 
 Route.post('/login', 'AuthController.login')
 Route.post('/register', 'AuthController.register')
 
-Route.resource('/sites', 'SitesController')
-  .apiOnly()
-  .middleware({ '*': ['auth'] })
-
-Route.resource('/sites/:siteId/status', 'StatusController')
-  .apiOnly()
-  .middleware({ '*': ['auth'] })
+Route.resource('/sites', 'SitesController').apiOnly().middleware(auth)
+Route.resource('/sites/:siteId/status', 'StatusController').apiOnly().middleware(auth)
