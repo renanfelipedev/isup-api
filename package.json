@@ -9,7 +9,7 @@
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write .",
     "test": "node -r @adonisjs/assembler/build/register japaFile.ts",
-    "posttest": "rm -rf ./tmp/db.sqlite3"
+    "posttest": "rm -rf ./tmp/db.sqlite3 && node ace migration:run && node ace db:seed"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^3.0.6",
